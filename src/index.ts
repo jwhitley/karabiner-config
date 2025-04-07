@@ -66,8 +66,8 @@ let mapKeyToModifier = (key: FromAndToKeyCode, modifier: ModifierKeyCode) => {
     .toIfHeldDown(modifier, undefined, {})
     .toDelayedAction([], { key_code: key })
     .parameters({
-      "basic.to_delayed_action_delay_milliseconds": 200,
-      "basic.to_if_held_down_threshold_milliseconds": 200,
+      "basic.to_delayed_action_delay_milliseconds": 150,
+      "basic.to_if_held_down_threshold_milliseconds": 150,
     });
 };
 
