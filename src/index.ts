@@ -1,32 +1,96 @@
 import {
+  duoLayer,
+  FromAndToKeyCode,
+  hyperLayer,
+  // conditions
+  ifApp,
+  ifDevice,
+  ifDeviceExists,
+  ifEventChanged,
+  ifInputSource,
+  ifKeyboardType,
+  ifVar,
+  KeyAlias,
   layer,
+  LetterKeyCode,
+  // from / map()
   map,
-  NumberKeyValue,
+  mapConsumerKey,
+  mapDoubleTap,
+  mapPointingButton,
+  mapSimultaneous,
+  ModifierKeyAlias,
+  modifierKeyAliases,
+  ModifierKeyCode,
+  modifierLayer,
+  ModifierParam,
+  mouseMotionToScroll,
+  MultiModifierAlias,
+  multiModifierAliases,
+  // rule and layers
   rule,
+  simlayer,
+  to$,
+  toApp,
+  toCgEventDoubleClick,
+  toConsumerKey,
+  toHyper,
+  toInputSource,
+  // to
+  toKey,
+  ToKeyParam,
+  toMeh,
+  toMouseCursorPosition,
+  toMouseKey,
+  toNone,
+  toNotificationMessage,
+  toPaste,
+  toPointingButton,
+  toRemoveNotificationMessage,
+  toSetVar,
+  toSleepSystem,
+  toStickyModifier,
+  toSuperHyper,
+  toTypeSequence,
+  toUnsetVar,
+  // utils
+  withCondition,
   withMapper,
+  withModifier,
   writeToProfile,
-} from 'karabiner.ts'
+} from "karabiner.ts";
+
+let mapKeyToModifier = (key: FromAndToKeyCode, modifier: ModifierKeyCode) => {
+  return map(key, "optionalAny")
+    .toIfAlone(key, undefined, { halt: true })
+    .toIfHeldDown(modifier, undefined, {})
+    .toDelayedAction([], { key_code: key })
+    .parameters({
+      "basic.to_delayed_action_delay_milliseconds": 200,
+      "basic.to_if_held_down_threshold_milliseconds": 200,
+    });
+};
 
 // ! Change '--dry-run' to your Karabiner-Elements Profile name.
 // (--dry-run print the config json into console)
 // + Create a new profile if needed.
-writeToProfile('--dry-run', [
-  // It is not required, but recommended to put symbol alias to layers,
-  // (If you type fast, use simlayer instead, see https://evan-liu.github.io/karabiner.ts/rules/simlayer)
-  // to make it easier to write '←' instead of 'left_arrow'.
-  // Supported alias: https://github.com/evan-liu/karabiner.ts/blob/main/src/utils/key-alias.ts
-  layer('/', 'symbol-mode').manipulators([
-    //     / + [ 1    2    3    4    5 ] =>
-    withMapper(['⌘', '⌥', '⌃', '⇧', '⇪'])((k, i) =>
-      map((i + 1) as NumberKeyValue).toPaste(k),
-    ),
-    withMapper(['←', '→', '↑', '↓', '␣', '⏎', '⇥', '⎋', '⌫', '⌦', '⇪'])((k) =>
-      map(k).toPaste(k),
-    ),
-  ]),
 
-  rule('Key mapping').manipulators([
-    // config key mappings
-    map(1).to(1)
+writeToProfile("Default profile", [
+  rule("CapsLock as Control-Escape").manipulators([
+    // hyper key
+    // map("caps_lock").toHyper().toIfAlone("escape"),
+    map("caps_lock").to("left_control").toIfAlone("escape"),
   ]),
-])
+  rule("Home Row Modifiers").manipulators([
+    // -- left side
+    mapKeyToModifier("a", "left_command"),
+    mapKeyToModifier("s", "left_option"),
+    mapKeyToModifier("d", "left_shift"),
+    mapKeyToModifier("f", "left_control"),
+    // -- right side
+    mapKeyToModifier("semicolon", "left_command"),
+    mapKeyToModifier("l", "left_option"),
+    mapKeyToModifier("k", "left_shift"),
+    mapKeyToModifier("j", "left_control"),
+  ]),
+]);
