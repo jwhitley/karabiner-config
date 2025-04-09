@@ -76,10 +76,9 @@ let mapKeyToModifier = (key: FromAndToKeyCode, modifier: ModifierKeyCode) => {
 // + Create a new profile if needed.
 
 writeToProfile("Default profile", [
-  rule("CapsLock as Control-Escape").manipulators([
-    // hyper key
-    // map("caps_lock").toHyper().toIfAlone("escape"),
-    map("caps_lock").to("left_control").toIfAlone("escape"),
+  rule("Hyper Key Configuration").manipulators([
+    // caps-lock as hyper key
+    map("caps_lock").toHyper().toIfAlone("escape"),
   ]),
   rule("Home Row Modifiers").manipulators([
     // -- left side
